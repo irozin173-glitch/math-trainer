@@ -712,15 +712,14 @@ cursor: pointer;
 }
 @media (max-width: 600px) {
 .container {
-padding: 45px 30px;
-margin: 20px;
+padding: 50px 25px;
+margin: 10px;
+width: 90% !important;
 max-width: 95% !important;
+min-height: 80vh !important;
 }
 h1 {
 font-size: 34px;
-}
-h1 {
-font-size: 28px;
 }
 .main-buttons {
 grid-template-columns: 1fr;
