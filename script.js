@@ -146,12 +146,12 @@ const wordSubjects = [
 {one:'яблоко',two:'яблока',five:'яблок'},{one:'груша',two:'груши',five:'груш'},{one:'слива',two:'сливы',five:'слив'},{one:'вишня',two:'вишни',five:'вишен'},{one:'клубника',two:'клубники',five:'клубники'},{one:'малина',two:'малины',five:'малины'},{one:'смородина',two:'смородины',five:'смородины'},{one:'дыня',two:'дыни',five:'дынь'},{one:'арбуз',two:'арбуза',five:'арбузов'},{one:'лимон',two:'лимона',five:'лимонов'},{one:'апельсин',two:'апельсина',five:'апельсинов'},{one:'банан',two:'банана',five:'бананов'},{one:'мандарин',two:'мандарина',five:'мандаринов'},{one:'персик',two:'персика',five:'персиков'},{one:'орех',two:'ореха',five:'орехов'},
 // Овощи (10)
 {one:'морковь',two:'моркови',five:'морковей'},{one:'картофелина',two:'картофелины',five:'картофелин'},{one:'помидор',two:'помидора',five:'помидоров'},{one:'огурец',two:'огурца',five:'огурцов'},{one:'луковица',two:'луковицы',five:'луковиц'},{one:'репка',two:'репки',five:'репок'},{one:'свекла',two:'свеклы',five:'свекл'},{one:'капуста',two:'капусты',five:'кочанов'},{one:'горошина',two:'горошины',five:'горошин'},{one:'семечко',two:'семечка',five:'семечек'},
-// Игрушки (12)
-{one:'кукла',two:'куклы',five:'кукол'},{one:'машинка',two:'машинки',five:'машинок'},{one:'мяч',two:'мяча',five:'мячей'},{one:'кубик',two:'кубика',five:'кубиков'},{one:'робот',two:'робота',five:'роботов'},{one:'мишка',two:'мишки',five:'мишек'},{one:'зайка',two:'зайки',five:'заек'},{one:'котик',two:'котика',five:'котиков'},{one:'собачка',two:'собачки',five:'собачек'},{one:'машинка',two:'машинки',five:'машинок'},{one:'конструктор',two:'конструктора',five:'конструкторов'},{one:'пазл',two:'пазла',five:'пазлов'},
+// Игрушки (11)
+{one:'кукла',two:'куклы',five:'кукол'},{one:'машинка',two:'машинки',five:'машинок'},{one:'мяч',two:'мяча',five:'мячей'},{one:'кубик',two:'кубика',five:'кубиков'},{one:'робот',two:'робота',five:'роботов'},{one:'мишка',two:'мишки',five:'мишек'},{one:'зайка',two:'зайки',five:'заек'},{one:'котик',two:'котика',five:'котиков'},{one:'собачка',two:'собачки',five:'собачек'},{one:'конструктор',two:'конструктора',five:'конструкторов'},{one:'пазл',two:'пазла',five:'пазлов'},
 // Школьные принадлежности (10)
 {one:'карандаш',two:'карандаша',five:'карандашей'},{one:'ручка',two:'ручки',five:'ручек'},{one:'линейка',two:'линейки',five:'линеек'},{one:'ластик',two:'ластика',five:'ластиков'},{one:'тетрадь',two:'тетради',five:'тетрадей'},{one:'книга',two:'книги',five:'книг'},{one:'пенал',two:'пенала',five:'пеналов'},{one:'рюкзак',two:'рюкзака',five:'рюкзаков'},{one:'альбом',two:'альбома',five:'альбомов'},{one:'фломастер',two:'фломастера',five:'фломастеров'},
 // Еда и сладости (8)
-{one:'конфета',two:'конфеты',five:'конфет'},{one:'печенье',two:'печенья',five:'печенья'},{one:'пряник',two:'пряника',five:'пряников'},{one:'пирожок',two:'пирожка',five:'пирожков'},{one:'булочка',two:'булочки',five:'булочек'},{one:'торт',two:'торта',five:'тортов'},{one:'пицца',two:'пиццы',five:'кусков пиццы'},{one:' мороженое',two:'мороженого',five:'мороженых'},
+{one:'конфета',two:'конфеты',five:'конфет'},{one:'печенье',two:'печенья',five:'печенья'},{one:'пряник',two:'пряника',five:'пряников'},{one:'пирожок',two:'пирожка',five:'пирожков'},{one:'булочка',two:'булочки',five:'булочек'},{one:'торт',two:'торта',five:'тортов'},{one:'пицца',two:'пиццы',five:'кусков пиццы'},{one:'мороженое',two:'мороженого',five:'мороженых'},
 // Животные (10)
 {one:'котенок',two:'котенка',five:'котят'},{one:'щенок',two:'щенка',five:'щенков'},{one:'птица',two:'птицы',five:'птиц'},{one:'рыбка',two:'рыбки',five:'рыбок'},{one:'хомяк',two:'хомяка',five:'хомяков'},{one:'морская свинка',two:'морские свинки',five:'морских свинок'},{one:'кролик',two:'кролика',five:'кроликов'},{one:'попугай',two:'попугая',five:'попугаев'},{one:'черепаха',two:'черепахи',five:'черепах'},{one:'бабочка',two:'бабочки',five:'бабочек'},
 // Деньги (3)
@@ -445,6 +445,7 @@ if(timeLeft <= 0) endGame();
 };
 const stopTimer = () => { if(timerInterval) clearInterval(timerInterval); timerInterval = null; };
 let selectedTopics = ['addition','subtraction','multiplication','division'];
+let lastWordProblemType = null; // Запоминаем последнюю тему текстовых задач
 
 const getRandomSimpleOperation = () => ['addition','subtraction','division','multiplication'][Math.floor(Math.random()*4)];
 const getRandomComplexOperation = () => ['parentheses','variables','units','expressions','equations','wordProblems','complexEquations','compareExpressions'][Math.floor(Math.random()*8)];
@@ -793,15 +794,20 @@ const generateWordProblems = () => {
 const s = wordSubjects[Math.floor(Math.random()*wordSubjects.length)];
 const n1 = getRandomInt(1,10+currentLevel), n2 = getRandomInt(1,10+currentLevel);
 let t, ans;
-const r = Math.random();
+let r = Math.random();
+// Исключаем повторение той же задачи на деньги подряд
+if (lastWordProblemType === 'money' && r > 0.45 && r < 0.55) {
+    r = 0.55 + Math.random() * 0.45; // Сдвигаем в другую зону
+}
+lastWordProblemType = r < 0.55 ? 'money' : 'other';
 
 // Варианты формулировок для вычитания
 const subtractPhrases = [
-    `В корзине было ${0}. Взяли ${1}. Сколько ${2} осталось?`,
-    `На столе лежало ${0}. Убрали ${1}. Сколько ${2} осталось?`,
-    `В вазе было ${0}. Взяли ${1}. Сколько ${2} осталось?`,
-    `На полке стояло ${0}. Унесли ${1}. Сколько ${2} осталось?`,
-    `В коробке было ${0}. Вынули ${1}. Сколько ${2} осталось?`
+    `В корзине было __MAX__. Взяли __MIN__. Сколько __FIVE__ осталось?`,
+    `На столе лежало __MAX__. Убрали __MIN__. Сколько __FIVE__ осталось?`,
+    `В вазе было __MAX__. Взяли __MIN__. Сколько __FIVE__ осталось?`,
+    `На полке стояло __MAX__. Унесли __MIN__. Сколько __FIVE__ осталось?`,
+    `В коробке было __MAX__. Вынули __MIN__. Сколько __FIVE__ осталось?`
 ];
 
 // Новые типы задач
@@ -816,9 +822,9 @@ else if(r<0.25) {
     ans=max-min; 
     const phrase = subtractPhrases[Math.floor(Math.random() * subtractPhrases.length)];
     t = phrase
-        .replace('${0}', max + ' ' + getPlural(max,s.one,s.two,s.five))
-        .replace('${1}', min + ' ' + getPlural(min,s.one,s.two,s.five))
-        .replace('${2}', s.five);
+        .replace('__MAX__', max + ' ' + getPlural(max,s.one,s.two,s.five))
+        .replace('__MIN__', min + ' ' + getPlural(min,s.one,s.two,s.five))
+        .replace('__FIVE__', s.five);
 }
 else if(r<0.35) { 
     // Умножение
@@ -830,36 +836,49 @@ else if(r<0.45) {
     // Деление
     const d = getRandomInt(2,5), tot = n1*d; 
     ans=n1; 
-    t=`${tot} ${getPlural(tot,s.one,s.two,s.five)} разложили на ${d} кучки. Сколько ${s.five} в каждой кучке?`; 
+    t=`${tot} ${getPlural(tot,s.one,s.two,s.five)} разложили на ${d} ${getPlural(d,'кучка','кучки','кучек')}. Сколько ${s.five} в каждой кучке?`; 
 }
 else if(r<0.55) {
-    // Задачи на деньги
+    // Задачи на деньги - разные товары
     const price = getRandomInt(2, 10);
     const count = getRandomInt(2, 5);
     ans = price * count;
-    t=`Конфета стоит ${price} рублей. Сколько стоят ${count} ${getPlural(count, 'конфета', 'конфеты', 'конфет')}?`;
+    // 8 разных товаров с правильным звучанием
+    const products = [
+        {one:'конфета',two:'конфеты',five:'конфет',text:'Конфета'},
+        {one:'печенье',two:'печенья',five:'печений',text:'Печенье'},
+        {one:'пряник',two:'пряника',five:'пряников',text:'Пряник'},
+        {one:'пирожок',two:'пирожка',five:'пирожков',text:'Пирожок'},
+        {one:'булочка',two:'булочки',five:'булочек',text:'Булочка'},
+        {one:'стакан кефира',two:'стакана кефира',five:'стаканов кефира',text:'Стакан кефира'},
+        {one:'стакан сока',two:'стакана сока',five:'стаканов сока',text:'Стакан сока'},
+        {one:'йогурт',two:'йогурта',five:'йогуртов',text:'Йогурт'}
+    ];
+    const prod = products[Math.floor(Math.random() * products.length)];
+    t=`${prod.text} стоит ${price} рублей. Сколько рублей стоят ${count} ${getPlural(count,prod.one,prod.two,prod.five)}?`;
 }
 else if(r<0.65) {
     // Задачи на сравнение
     const a = getRandomInt(5, 20+currentLevel);
     const b = getRandomInt(5, 20+currentLevel);
     ans = Math.abs(a - b);
-    t=`У Маши ${a} ${getPlural(a,s.one,s.two,s.five)}, а у Дашы ${b} ${getPlural(b,s.one,s.two,s.five)}. На сколько ${s.five} у одной девочки больше, чем у другой?`;
+    t=`У Маши ${a} ${getPlural(a,s.one,s.two,s.five)}, а у Даши ${b} ${getPlural(b,s.one,s.two,s.five)}. На сколько ${s.five} у одной девочки больше, чем у другой?`;
 }
 else if(r<0.75) {
     // Задачи на остаток
     const total = getRandomInt(10, 30);
     const given = getRandomInt(1, Math.min(total-1, 10));
     ans = total - given;
-    t=`Было ${total} ${getPlural(total,s.one,s.two,s.five)}. Отдали другу ${given} ${getPlural(given,s.one,s.two,s.five)}. Сколько ${s.five} осталось?`;
+    t=`Было ${total} ${getPlural(total,s.one,s.two,s.five)}. Отдали другу ${given} ${getPlural(given,s.one,s.two,s.five)}. Сколько ${getPlural(ans,s.one,s.two,s.five)} осталось?`;
 }
 else if(r<0.85) {
     // Задачи на два действия
     const a = getRandomInt(3, 10);
     const b = getRandomInt(2, 5);
-    const c = getRandomInt(2, 5);
-    ans = a * b - c;
-    t=`Купили ${b} тетради по ${a} рублей и заплатили ${c} рубля сдачи. Сколько рублей было у покупателя?`;
+    const cost = a * b;
+    const given = cost + getRandomInt(5, 20);
+    ans = given - cost;
+    t=`Купили ${b} ${getPlural(b,'тетрадь','тетради','тетрадей')} по ${a} рублей. Отдали кассиру ${given} ${getPlural(given,'рубль','рубля','рублей')}. Сколько рублей сдачи получил?`;
 }
 else {
     // Задачи на периметр
@@ -1028,6 +1047,8 @@ window.verifyHouse = (btn, isCorrect) => {
 const parentRow = btn.parentElement.parentElement;
 const btnsInRow = parentRow.querySelectorAll('.menu-btn');
 if (btnsInRow[0].disabled && parentRow.querySelector('button[style*="background: rgb(39, 174, 96)"]')) return;
+if (isAnswerChecked) return; // Защита от повторного нажатия
+isAnswerChecked = true;
 if (isCorrect) {
 btnsInRow.forEach(b => {
 b.disabled = true;
@@ -1044,9 +1065,12 @@ setTimeout(() => {
 score += 10 * currentLevel;
 showMessage('Правильно! ✓', true);
 playLevelUpSound();
+isAnswerChecked = false;
 currentLevel++; updateBestLevel(); updateDisplay();
 generateTask();
 }, 500);
+} else {
+isAnswerChecked = false;
 }
 } else {
 playWrongSound();
@@ -1054,6 +1078,7 @@ btn.style.background = '#e74c3c'; btn.style.color = 'white';
 btn.disabled = true; 
 totalAnswers++;
 houseState.errors++;
+isAnswerChecked = false;
 if (houseState.errors >= 2) {
 document.querySelectorAll('#expression-container .menu-btn').forEach(b => b.disabled = true);
 showMessage('Ошибка! Уровень перезапускается...', false);
@@ -1342,6 +1367,7 @@ score += 10 * currentLevel;
 correctAnswers++;
 totalAnswers++;
 showMessage('Правильно! ✓', true);
+isAnswerChecked = false;
 if (correctAnswers % 3 === 0) {
 currentLevel++;
 playLevelUpSound();
@@ -1353,6 +1379,7 @@ setTimeout(generateTask, 1000);
 playWrongSound();
 showMessage('Неправильно! Ответ: ' + correct, false);
 totalAnswers++;
+isAnswerChecked = false;
 if(currentLevel>1) currentLevel--;
 setTimeout(generateTask, 1500);
 }
@@ -1489,6 +1516,9 @@ isAnswerChecked = true;
 let ok = false;
 if(currentTask.type==='number') ok = parseInt(v) === currentTask.answer;
 else if(currentTask.type==='symbol') ok = v === currentTask.answer;
+else if(currentTask.type==='oneNumber') {
+    ok = parseInt(v) === currentTask.answerValue;
+}
 else if(currentTask.type==='twoNumbers') {
     const parts = v.replace(/[,;]+/g, ' ').trim().split(/\s+/);
     ok = parts.length >= 2 && 
@@ -1498,13 +1528,47 @@ else if(currentTask.type==='twoNumbers') {
 handleAnswer(ok);
 };
 const praises = [
-'Правильно! ✓', 'Супер! 🌟', 'Молодец! 👏', 'Так держать! 💪', 
-'Отлично! 🎉', 'Умница! ⭐', 'Браво! 🏆', 'Великолепно! 💎'
+    // Обычные фразы (20+)
+    'Правильно! ✓', 'Супер! 🌟', 'Молодец! 👏', 'Так держать! 💪', 
+    'Отлично! 🎉', 'Умница! ⭐', 'Браво! 🏆', 'Великолепно! 💎',
+    'Здорово! 🎊', 'Верно! ✔️', 'Так и надо! 👍', 'Правильный ответ! ✅',
+    'Блестяще! ✨', 'Чудесно! 🌈', 'Превосходно! 🌟', 'Замечательно! 🎈',
+    'Ты молодец! 🎖️', 'Так держать! 🚀', 'Вперёд! 💫', 'Ещё! 🔥',
+    'Молодец! 🌺', 'Хорошо! 👌', 'Отличная работа! 🏅', 'Ты умница! 🧠',
+    // Особые фразы для серии (5+)
+    'Не останавливайся! 🔥', 'Разгоняешься! ⚡', 'Горячая серия! 🌡️',
+    'Ты в ритме! 🎵', 'Идёшь как по маслу! 🛣️'
 ];
 const streakMessages = [
-'', '🔥 1 подряд!', '🔥🔥 2 подряд!', '🔥🔥🔥 3 подряд!',
-'🔥🔥🔥🔥 4 подряд!', '🔥🔥🔥🔥🔥 5 подряд!', '🔥 ЦЕЛАЯ СЕРИЯ! 🔥'
+    '', '🔥 1 подряд!', '🔥🔥 2 подряд!', '🔥🔥🔥 3 подряд!',
+    '🔥🔥🔥🔥 4 подряд!', '🔥🔥🔥🔥🔥 5 подряд!', '🔥 ЦЕЛАЯ СЕРИЯ! 🔥',
+    '🔥🔥 ЦЕЛАЯ СЕРИЯ! 🔥🔥', '🔥🔥🔥 ЦЕЛАЯ СЕРИЯ! 🔥🔥🔥',
+    '🏆 ЦЕЛАЯ СЕРИЯ! 🏆', '👑 ЦЕЛАЯ СЕРИЯ! 👑', '🌟 ЦЕЛАЯ СЕРИЯ! 🌟',
+    '💥 ЦЕЛАЯ СЕРИЯ! 💥', '🚀 ЦЕЛАЯ СЕРИЯ! 🚀'
 ];
+let lastPraiseIndex = -1;
+let lastStreakIndex = -1;
+const getLastPraise = (streak) => {
+    let available = praises.filter((_, i) => i !== lastPraiseIndex);
+    if (available.length === 0) available = praises;
+    const index = Math.floor(Math.random() * available.length);
+    const phrase = available[index];
+    const fullIndex = praises.indexOf(phrase);
+    lastPraiseIndex = fullIndex;
+    return phrase;
+};
+const getLastStreak = (streak) => {
+    if (streak >= 6) {
+        let available = streakMessages.filter((_, i) => i >= 6 && i !== lastStreakIndex);
+        if (available.length === 0) available = streakMessages.filter(i => i >= 6);
+        const index = Math.floor(Math.random() * available.length);
+        const phrase = available[index];
+        const fullIndex = streakMessages.indexOf(phrase);
+        lastStreakIndex = fullIndex;
+        return phrase;
+    }
+    return streakMessages[streak] || '';
+};
 
 const handleAnswer = (ok) => {
 totalAnswers++;
